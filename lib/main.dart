@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 void main() {
   runApp(MyApp());
@@ -59,6 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  late TooltipBehavior _tooltipBehavior;
+
+  @override
+  void initState(){
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+      borderColor: Colors.black12,
+      borderWidth: 5,
+    );
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -93,21 +107,75 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Container(
+
+                height:550,
+                child: SfCartesianChart(
+                    title: ChartTitle(
+                      text: "Average Hourly Energy Levels",
+                    ),
+                    primaryXAxis: NumericAxis(
+                      edgeLabelPlacement: EdgeLabelPlacement.shift,
+                      rangePadding: ChartRangePadding.round,
+                      title: AxisTitle(
+                        text: "Hour",
+                      ),
+                    ),
+
+                    primaryYAxis: NumericAxis(
+                      edgeLabelPlacement: EdgeLabelPlacement.shift,
+                      rangePadding: ChartRangePadding.auto,
+                      title: AxisTitle(
+                        text: "Energy Level",
+                      ),
+                    ),
+                    tooltipBehavior: _tooltipBehavior,
+                    series: <ChartSeries>[
+                      SplineSeries<Energy, double>(
+                          dataSource: getChartData(),
+                          xValueMapper: (Energy energy,_)=>energy.x,
+                          yValueMapper: (Energy energy,_)=>energy.y,
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: false,
+                            labelPosition: ChartDataLabelPosition.outside,
+                          )
+                      )
+                    ]
+                )
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
     );
   }
+}
+
+class Energy{
+  final double x;
+  final double y;
+  Energy(this.x, this.y);
+}
+
+dynamic getChartData(){
+  final List<Energy> chartData=<Energy>[
+    Energy(6, 2.5),
+    Energy(7, 2.6),
+    Energy(8, 2.8),
+    Energy(9, 2.8),
+    Energy(10, 2.3),
+    Energy(11, 2.8),
+    Energy(12, 2.7),
+    Energy(13, 2.0),
+    Energy(14, 2.4),
+    Energy(15, 2.4),
+    Energy(16, 2.2),
+    Energy(17, 2.8),
+    Energy(18, 2.9),
+    Energy(19, 2.6),
+    Energy(20, 2.0),
+    Energy(21, 2.9),
+    Energy(22, 2.9),
+  ];
+  return chartData;
 }

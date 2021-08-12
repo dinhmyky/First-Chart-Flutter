@@ -1,4 +1,4 @@
-name: newflutter
+name: fluttercode
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -32,7 +32,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  syncfusion_flutter_charts: ^19.2.51
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
